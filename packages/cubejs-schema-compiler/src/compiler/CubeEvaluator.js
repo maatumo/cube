@@ -37,6 +37,42 @@ export class CubeEvaluator extends CubeSymbols {
    * @protected
    */
   prepareCube(cube, errorReporter) {
+    this.transformJoins(cube, errorReporter);
+    this.transformPreAggregations(cube, errorReporter);
+    this.transformMembers(cube.measures, cube, errorReporter);
+    this.transformMembers(cube.dimensions, cube, errorReporter);
+    this.transformMembers(cube.segments, cube, errorReporter);
+    this.addIncludes(cube, errorReporter);
+  }
+
+  /**
+   * @protected
+   */
+  transformJoins(cube, _errorReporter) {
+    if (cube.joins) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const join of Object.values(cube.joins)) {
+        // eslint-disable-next-line default-case
+        switch (join.type) {
+          case 'belongs_to':
+            join.type = 'belongsTo';
+            break;
+          case 'has_many':
+            join.type = 'hasMany';
+            break;
+          case 'has_one':
+          case 'many_to_one':
+            join.type = 'hasOne';
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * @protected
+   */
+  transformPreAggregations(cube, errorReporter) {
     if (cube.preAggregations) {
       // eslint-disable-next-line no-restricted-syntax
       for (const preAggregation of Object.values(cube.preAggregations)) {
@@ -88,12 +124,11 @@ export class CubeEvaluator extends CubeSymbols {
         }
       }
     }
-    this.transformMembers(cube.measures, cube, errorReporter);
-    this.transformMembers(cube.dimensions, cube, errorReporter);
-    this.transformMembers(cube.segments, cube, errorReporter);
-    this.addIncludes(cube, errorReporter);
   }
 
+  /**
+   * @protected
+   */
   transformMembers(members, cube, errorReporter) {
     members = members || {};
     for (const memberName of Object.keys(members)) {
@@ -122,6 +157,9 @@ export class CubeEvaluator extends CubeSymbols {
     }
   }
 
+  /**
+   * @protected
+   */
   addIncludes(cube, errorReporter) {
     if (!cube.includes) {
       return;
@@ -142,6 +180,9 @@ export class CubeEvaluator extends CubeSymbols {
     }
   }
 
+  /**
+   * @protected
+   */
   membersFromIncludeExclude(referencesFn, cubeName, type) {
     const references = this.evaluateReferences(cubeName, referencesFn);
     return R.unnest(references.map(ref => {
@@ -158,6 +199,9 @@ export class CubeEvaluator extends CubeSymbols {
     })).filter(Boolean);
   }
 
+  /**
+   * @protected
+   */
   generateIncludeMembers(members, cubeName, type) {
     return members.map(memberRef => {
       const path = memberRef.split('.');
