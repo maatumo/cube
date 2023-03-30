@@ -53,21 +53,21 @@ export class CubeEvaluator extends CubeSymbols {
       // eslint-disable-next-line no-restricted-syntax
       for (const join of Object.values(cube.joins)) {
         // eslint-disable-next-line default-case
-        switch (join.type) {
+        switch (join.relationship) {
           case 'belongs_to':
           case 'many_to_one':
           case 'manyToOne':
-            join.type = 'belongsTo';
+            join.relationship = 'belongsTo';
             break;
           case 'has_many':
           case 'one_to_many':
           case 'oneToMany':
-            join.type = 'hasMany';
+            join.relationship = 'hasMany';
             break;
           case 'has_one':
           case 'one_to_one':
           case 'oneToOne':
-            join.type = 'hasOne';
+            join.relationship = 'hasOne';
             break;
         }
       }
