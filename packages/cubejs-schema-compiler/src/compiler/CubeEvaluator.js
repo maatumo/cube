@@ -37,18 +37,18 @@ export class CubeEvaluator extends CubeSymbols {
    * @protected
    */
   prepareCube(cube, errorReporter) {
-    this.transformJoins(cube, errorReporter);
-    this.transformPreAggregations(cube, errorReporter);
-    this.transformMembers(cube.measures, cube, errorReporter);
-    this.transformMembers(cube.dimensions, cube, errorReporter);
-    this.transformMembers(cube.segments, cube, errorReporter);
-    this.addIncludes(cube, errorReporter);
+    this.prepareJoins(cube, errorReporter);
+    this.preparePreAggregations(cube, errorReporter);
+    this.prepareMembers(cube.measures, cube, errorReporter);
+    this.prepareMembers(cube.dimensions, cube, errorReporter);
+    this.prepareMembers(cube.segments, cube, errorReporter);
+    this.prepareIncludes(cube, errorReporter);
   }
 
   /**
    * @protected
    */
-  transformJoins(cube, _errorReporter) {
+  prepareJoins(cube, _errorReporter) {
     if (cube.joins) {
       // eslint-disable-next-line no-restricted-syntax
       for (const join of Object.values(cube.joins)) {
@@ -74,7 +74,7 @@ export class CubeEvaluator extends CubeSymbols {
   /**
    * @protected
    */
-  transformPreAggregations(cube, errorReporter) {
+  preparePreAggregations(cube, errorReporter) {
     if (cube.preAggregations) {
       // eslint-disable-next-line no-restricted-syntax
       for (const preAggregation of Object.values(cube.preAggregations)) {
@@ -131,7 +131,7 @@ export class CubeEvaluator extends CubeSymbols {
   /**
    * @protected
    */
-  transformMembers(members, cube, errorReporter) {
+  prepareMembers(members, cube, errorReporter) {
     members = members || {};
     for (const memberName of Object.keys(members)) {
       let ownedByCube = true;
@@ -162,7 +162,7 @@ export class CubeEvaluator extends CubeSymbols {
   /**
    * @protected
    */
-  addIncludes(cube, errorReporter) {
+  prepareIncludes(cube, errorReporter) {
     if (!cube.includes) {
       return;
     }
