@@ -56,14 +56,17 @@ export class CubeEvaluator extends CubeSymbols {
         switch (join.type) {
           case 'belongs_to':
           case 'many_to_one':
+          case 'manyToOne':
             join.type = 'belongsTo';
             break;
           case 'has_many':
           case 'one_to_many':
+          case 'oneToMany':
             join.type = 'hasMany';
             break;
           case 'has_one':
           case 'one_to_one':
+          case 'oneToOne':
             join.type = 'hasOne';
             break;
         }
