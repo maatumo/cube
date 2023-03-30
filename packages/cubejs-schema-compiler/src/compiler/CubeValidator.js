@@ -470,7 +470,7 @@ const baseSchema = {
   public: Joi.boolean().strict(),
   joins: Joi.object().pattern(identifierRegex, Joi.object().keys({
     sql: Joi.func().required(),
-    relationship: Joi.any().valid('belongsTo', 'belongs_to', 'hasMany', 'has_many', 'hasOne', 'has_one', 'many_to_one').required()
+    relationship: Joi.any().valid('belongsTo', 'belongs_to', 'many_to_one', 'hasMany', 'has_many', 'one_to_many', 'hasOne', 'has_one', 'one_to_one').required()
   })),
   measures: MeasuresSchema,
   dimensions: Joi.object().pattern(identifierRegex, Joi.alternatives().try(
